@@ -131,6 +131,10 @@ class Idea(object):
 
     def getBase64Command(self,command):
         import  base64
+        
+        if 'bash -c {echo' in command:
+            return command
+        
         base1 = str(base64.b64encode(str(command).encode(encoding='utf-8')))
         base2 = base1.replace("b'","")
         base3 = base2.replace("'","")
